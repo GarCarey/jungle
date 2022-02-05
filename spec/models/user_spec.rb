@@ -67,6 +67,22 @@ RSpec.describe User, type: :model do
 
       expect(user.errors.full_messages).to be == ["Password is too short (minimum is 8 characters)"]
     end
+  end
 
+  describe ".authenticate_with_credentials" do
+    it "will return nil if no user is found" do
+      result = User.authenticate_with_credentials("c@g.com", "12345678")
+
+      expect(result).to be_nil
+    end
+
+    it "will return user if user is found" do
+      user = User.new(first_name: "Gar", last_name: "Carey", email: "g@c.com", password: "12345678", password_confirmation: "12345678")
+      user.save
+
+      result = User.authenticate_with_credentials("g@c.com", "12345678")
+
+      expect(result).to be == user
+    end
   end
 end
